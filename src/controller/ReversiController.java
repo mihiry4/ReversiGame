@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import javafx.util.Pair;
 import model.ReversiModel;
+import myExceptions.ReversiGameOverException;
 import myExceptions.ReversiIllegalMoveException;
 
 /**
@@ -19,6 +20,7 @@ public class ReversiController {
 	private ReversiModel model;
 	private char cpuColor;
 	private char playerColor;
+	public boolean gameOver;
 	private HashMap<Pair<Integer, Integer>, Integer> legalMoves;
 	
 	public ReversiController() {
@@ -33,7 +35,9 @@ public class ReversiController {
 		legalMoves = new HashMap<Pair<Integer, Integer>, Integer>();
 	}
 	
-	public void playMove(int x, int y) throws ReversiIllegalMoveException {
+	public void playMove(int x, int y) throws ReversiIllegalMoveException, ReversiGameOverException {
+		if(gameOver)
+			throw new ReversiGameOverException("Cannot play after game over");
 		this.getLegalMoves(this.playerColor);
 		if(isLegalMove(new Pair<Integer, Integer>(x,y)))
 			this.model.setPiece(this.playerColor, x, y);
@@ -48,12 +52,17 @@ public class ReversiController {
 			this.getLegalMoves(this.playerColor);
 			if(this.legalMoves.isEmpty()) {
 				// TODO GAME OVER HANDLING
+				this.gameOver= true;
+			} else {
+				return; // Player turn
 			}
 				
 		} else {
 			playBestMove();
 			if(this.getLegalMoves(this.playerColor).isEmpty())
 				this.cpuTurn();
+			else
+				return; // Player turn
 		}
 	}
 	
