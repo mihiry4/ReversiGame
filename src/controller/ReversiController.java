@@ -44,6 +44,9 @@ public class ReversiController {
 		else {
 			throw new ReversiIllegalMoveException("" + x +"," + y);
 		}
+		
+		// Now its the CPU's turn to play
+		cpuTurn();
 	}
 	
 	private void cpuTurn() {
