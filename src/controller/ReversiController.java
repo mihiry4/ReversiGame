@@ -22,7 +22,6 @@ public class ReversiController {
 	public ReversiController() {
 		model = new ReversiModel();
 		legalMoves = new HashMap<Pair<Integer, Integer>, Integer>();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public ReversiController(ReversiModel model) {
