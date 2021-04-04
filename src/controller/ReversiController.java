@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 import javafx.util.Pair;
 import model.ReversiModel;
+import myExceptions.ReversiGameOverException;
+import myExceptions.ReversiIllegalMoveException;
 
 /**
  * @author Shreyas Khandekar
@@ -16,12 +18,16 @@ public class ReversiController {
 
 	
 	private ReversiModel model;
-	private char currentTurn;
+	private char cpuColor;
+	private char playerColor;
+	public boolean gameOver;
 	private HashMap<Pair<Integer, Integer>, Integer> legalMoves;
 	
 	public ReversiController() {
 		model = new ReversiModel();
 		legalMoves = new HashMap<Pair<Integer, Integer>, Integer>();
+		cpuColor = 'b';
+		playerColor = 'w';
 	}
 	
 	public ReversiController(ReversiModel model) {
@@ -29,8 +35,56 @@ public class ReversiController {
 		legalMoves = new HashMap<Pair<Integer, Integer>, Integer>();
 	}
 	
-	private void nextTurn() {
+	public void playMove(int x, int y) throws ReversiIllegalMoveException, ReversiGameOverException {
+		if(gameOver)
+			throw new ReversiGameOverException("Cannot play after game over");
+		this.getLegalMoves(this.playerColor);
+		if(isLegalMove(new Pair<Integer, Integer>(x,y)))
+			this.model.setPiece(this.playerColor, x, y);
+		else {
+			throw new ReversiIllegalMoveException("" + x +"," + y);
+		}
 		
+		// Now its the CPU's turn to play
+		cpuTurn();
+	}
+	
+	private void cpuTurn() {
+		this.getLegalMoves(this.cpuColor);
+		if(this.legalMoves.isEmpty()) {
+			this.getLegalMoves(this.playerColor);
+			if(this.legalMoves.isEmpty()) {
+				// TODO GAME OVER HANDLING
+				this.gameOver= true;
+			} else {
+				return; // Player turn
+			}
+				
+		} else {
+			playBestMove();
+			if(this.getLegalMoves(this.playerColor).isEmpty())
+				this.cpuTurn();
+			else
+				return; // Player turn
+		}
+	}
+	
+	private void playBestMove() {
+		int highestScore = 0;
+		Pair<Integer, Integer> bestMove = null;
+		for(Pair<Integer, Integer> p : this.legalMoves.keySet()) {
+			int currScore = this.legalMoves.get(p);
+			if(currScore>highestScore) {
+				highestScore = currScore;
+				bestMove = p;
+			}
+		}
+		
+		model.setPiece(cpuColor, bestMove.getKey(), bestMove.getValue());
+	}
+	
+	private boolean isLegalMove(Pair<Integer, Integer> p) {
+		return legalMoves.containsKey(p);
 	}
 	
 	public HashMap<Pair<Integer, Integer>, Integer> getLegalMoves(char c){
@@ -141,16 +195,4 @@ public class ReversiController {
 		
 	}
 	
-	private boolean isLegalMove(Pair<Integer, Integer> p) {
-		return legalMoves.containsKey(p);
-	}
-	
-	public void playMove(int x, int y) {
-		
-	}
-	
-	public void playBestMove() {
-		
-	}
-
 }
