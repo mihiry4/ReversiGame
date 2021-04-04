@@ -11,19 +11,25 @@ import javafx.util.Pair;
 
 /**
  * @author Shreyas Khandekar
+ * @author Mihir Yadav
  *
  */
 @SuppressWarnings("deprecation")
 public class ReversiModel extends Observable {
 
-	Map<Pair<Integer, Integer>, Integer> map = new HashMap<Pair<Integer, Integer>, Integer>();
-	/**
-	 * 
-	 */
+	private ReversiBoard board;
+	
+	
 	public ReversiModel() {
 		
 	}
 	
+	public char getPiece(int x, int y) {
+		return 0;
+	}
 	
+	public char setPiece(int x, int y) {
+		return 0;
+	}
 
 }

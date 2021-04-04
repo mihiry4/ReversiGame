@@ -10,7 +10,7 @@ import javafx.util.Pair;
 
 /**
  * @author Shreyas Khandekar
- *
+ * @author Mihir Yadav
  */
 public class Reversi {
 
