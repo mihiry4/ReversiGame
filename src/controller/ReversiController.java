@@ -40,6 +40,15 @@ public class ReversiController {
 		return legalMoves;
 	}
 	
+	/*
+	 * 
+	 * 
+	 * 
+	 * to do: in conditions != c can be empty spaces too
+	 * change that to 'B' or 'W'
+	 * 
+	 * 
+	 */
 	// gets all moves for current piece
 	private void getMovesInAllDirections(char c, int i, int j) {
 		//  left to right direction
