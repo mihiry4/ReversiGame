@@ -1,5 +1,10 @@
 package testSuite;
 
-public class ReversiTest {
+import org.junit.jupiter.api.Test;
 
+public class ReversiTest {
+	@Test
+	void testGetAllMoves(){
+		
+	}
 }
