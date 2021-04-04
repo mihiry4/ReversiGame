@@ -25,11 +25,16 @@ public class ReversiController {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public ReversiController(ReversiModel model) {
+		this.model = model;
+		legalMoves = new HashMap<Pair<Integer, Integer>, Integer>();
+	}
+	
 	private void nextTurn() {
 		
 	}
 	
-	private HashMap<Pair<Integer, Integer>, Integer> getLegalMoves(char c){
+	public HashMap<Pair<Integer, Integer>, Integer> getLegalMoves(char c){
 		for(int i = 0;i<8;i++) {
 			for(int j = 0;j<8;j++) {
 				if(model.getPiece(i,j) == c) {
@@ -54,7 +59,7 @@ public class ReversiController {
 		//  left to right direction
 		int LToRScore =0;
 		int x = i+1; int y = j+0;
-		while(x<8 && model.getPiece(x, y) != c) {
+		while(x<8 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
 			x++;
 			LToRScore++;
 		}
@@ -65,7 +70,7 @@ public class ReversiController {
 		// right to left direction
 		int RToLScore =0;
 		x = i-1; y = j+0;
-		while(x>=0 && model.getPiece(x, y) != c) {
+		while(x>=0 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
 			x--;
 			RToLScore++;
 		}
@@ -76,7 +81,7 @@ public class ReversiController {
 		// up to down direction
 		int UToDScore =0;
 		x = i; y = j+1;
-		while(y<8 && model.getPiece(x, y) != c) {
+		while(y<8 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
 			y++;
 			UToDScore++;
 		}
@@ -87,7 +92,7 @@ public class ReversiController {
 		// down to up direction
 		int DToUScore =0;
 		x = i; y = j-1;
-		while(y>=0 && model.getPiece(x, y) != c) {
+		while(y>=0 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
 			y--;
 			DToUScore++;
 		}
@@ -98,19 +103,19 @@ public class ReversiController {
 		// diagonal Left Bottom to Right top
 		int LBToRTScore =0;
 		x = i+1; y = j-1;
-		while(y>=0 && x<8 && model.getPiece(x, y) != c) {
+		while(y>=0 && x<8 && model.getPiece(x, y) != ' ' &&  model.getPiece(x, y) != c) {
 			y--;
 			x++;
 			LBToRTScore++;
 		}
-		if(y>=0 && x<8 && LBToRTScore!=0) {
+		if(y>=0 && x<8 &&  LBToRTScore!=0) {
 			legalMoves.put(new Pair<Integer,Integer>(x,y),LBToRTScore);
 		}
 		
 		// diagonal Right top to Left Bottom 
 		int RTToLBScore =0;
 		x = i-1; y = j+1;
-		while(y<8 && x>=0 && model.getPiece(x, y) != c) {
+		while(y<8 && x>=0 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
 			y++;
 			x--;
 			RTToLBScore++;
@@ -122,7 +127,7 @@ public class ReversiController {
 		// diagonal Left top to Right Bottom 
 		int LTToRBScore =0;
 		x = i+1; y = j+1;
-		while(y<8 && x<8 && model.getPiece(x, y) != c) {
+		while(y<8 && x<8 && model.getPiece(x, y) != ' ' &&  model.getPiece(x, y) != c) {
 			y++;
 			x++;
 			LTToRBScore++;
@@ -134,12 +139,12 @@ public class ReversiController {
 		// diagonal Right Bottom to Left top 
 		int RBToLTScore =0;
 		x = i-1; y = j-1;
-		while(y>=0 && x>=0 && model.getPiece(x, y) != c) {
+		while(y>=0 && x>=0 && model.getPiece(x, y) != ' ' &&  model.getPiece(x, y) != c) {
 			y--;
 			x--;
 			RBToLTScore++;
 		}
-		if(y>=0 && x>=0 && RBToLTScore!=0) {
+		if(y>=0 && x>=0 &&  RBToLTScore!=0) {
 			legalMoves.put(new Pair<Integer,Integer>(x,y),RBToLTScore);
 		}
 		
