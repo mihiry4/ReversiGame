@@ -75,7 +75,7 @@ public class ReversiController {
 		return legalMoves.containsKey(p);
 	}
 	
-	private HashMap<Pair<Integer, Integer>, Integer> getLegalMoves(char c){
+	public HashMap<Pair<Integer, Integer>, Integer> getLegalMoves(char c){
 		for(int i = 0;i<8;i++) {
 			for(int j = 0;j<8;j++) {
 				if(model.getPiece(i,j) == c) {
