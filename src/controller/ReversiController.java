@@ -146,7 +146,7 @@ public class ReversiController {
 	}
 	
 	private boolean isLegalMove(Pair<Integer, Integer> p) {
-		return false;
+		return legalMoves.containsKey(p);
 	}
 	
 	public void playMove(int x, int y) {
