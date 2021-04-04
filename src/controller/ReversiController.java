@@ -20,6 +20,8 @@ public class ReversiController {
 	private HashMap<Pair<Integer, Integer>, Integer> legalMoves;
 	
 	public ReversiController() {
+		model = new ReversiModel();
+		legalMoves = new HashMap<Pair<Integer, Integer>, Integer>();
 		// TODO Auto-generated constructor stub
 	}
 	
