@@ -19,17 +19,19 @@ public class ReversiModel extends Observable {
 
 	private ReversiBoard board;
 	
-	
+	// creates new reversi board
 	public ReversiModel() {
-		
+		board = new ReversiBoard();
 	}
 	
+	// get piece at x,y
 	public char getPiece(int x, int y) {
-		return 0;
+		return board.getValue(x, y);
 	}
 	
-	public char setPiece(int x, int y) {
-		return 0;
+	// sets piece at x,y
+	public void setPiece(char c, int x, int y) {
+		board.setValue(c, x, y);
 	}
 
 }
