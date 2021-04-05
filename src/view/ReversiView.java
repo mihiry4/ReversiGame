@@ -8,6 +8,13 @@ import java.util.Observer;
 
 import controller.ReversiController;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.ReversiModel;
 
@@ -27,9 +34,31 @@ public class ReversiView extends Application implements Observer {
 	}
 
 	@Override
-	public void start(Stage arg0) throws Exception {
-		// TODO Auto-generated method stub
+	public void start(Stage stage) throws Exception {
+	BorderPane pane = new BorderPane();
+	GridPane masterGridPane = new GridPane();
+    pane.setCenter(masterGridPane);
+    masterGridPane.setStyle("-fx-background-color: green");
+	masterGridPane.add(addGridPane(), 1, 1);
 
+//    for(int i = 0;i<8;i++) {
+//    }
+    
+     // stage setup
+     Scene scene = new Scene(pane, 400, 400);
+	 stage.setScene(scene);
+	 stage.setTitle("Mastermind");
+	 stage.show();
+	}
+	
+	private StackPane addGridPane() {
+		//Rectangle(double x, double y, double width, double height)
+		Rectangle s = new Rectangle(0,0,40,40);
+		StackPane stackPane = new StackPane();
+		s.setStyle("-fx-background-color: blue");
+		stackPane.getChildren().add(s);
+		return stackPane;
+		
 	}
 
 	@Override
