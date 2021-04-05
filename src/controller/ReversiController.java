@@ -20,7 +20,7 @@ public class ReversiController {
 	private ReversiModel model;
 	private char cpuColor;
 	private char playerColor;
-	public boolean gameOver;
+	private boolean gameOver;
 	private HashMap<Pair<Integer, Integer>, Integer> legalMoves;
 	
 	public ReversiController() {
@@ -28,11 +28,15 @@ public class ReversiController {
 		legalMoves = new HashMap<Pair<Integer, Integer>, Integer>();
 		cpuColor = 'b';
 		playerColor = 'w';
+		gameOver = false;
 	}
 	
 	public ReversiController(ReversiModel model) {
 		this.model = model;
 		legalMoves = new HashMap<Pair<Integer, Integer>, Integer>();
+		cpuColor = 'b';
+		playerColor = 'w';
+		gameOver = false;
 	}
 	
 	public void playMove(int x, int y) throws ReversiIllegalMoveException, ReversiGameOverException {
@@ -45,10 +49,35 @@ public class ReversiController {
 			throw new ReversiIllegalMoveException("" + x +"," + y);
 		}
 		
-		// Now its the CPU's turn to play
+		this.flipColorsInAllDirections(this.playerColor, x, y);
+		legalMoves.clear();
+		System.out.println(this.getBoard());
+
+		// Now its the CPU's turn to play after player
 		cpuTurn();
 	}
 	
+	public boolean isGameOver() {
+		return this.gameOver;
+	}
+	
+	public String getBoard() {
+		return model.toString();
+	}
+	
+	public int playerWin() {
+		int playerCount=0;
+		int cpuCount=0;
+		for(int i=0 ; i<8 ; ++i) {
+			for(int j=0 ; j<8 ; ++j) {
+				if(model.getPiece(i, j)==this.cpuColor)
+					playerCount++;
+				if(model.getPiece(i, j)==this.playerColor)
+					cpuCount++;
+			}
+		}
+		return playerCount>cpuCount? 1: (playerCount==cpuCount? 0 : -1);
+	}
 	private void cpuTurn() {
 		this.getLegalMoves(this.cpuColor);
 		if(this.legalMoves.isEmpty()) {
@@ -79,8 +108,10 @@ public class ReversiController {
 				bestMove = p;
 			}
 		}
-		
 		model.setPiece(cpuColor, bestMove.getKey(), bestMove.getValue());
+		this.flipColorsInAllDirections(this.cpuColor, bestMove.getKey(), bestMove.getValue());
+		legalMoves.clear();
+		
 	}
 	
 	private boolean isLegalMove(Pair<Integer, Integer> p) {
@@ -98,9 +129,8 @@ public class ReversiController {
 		return legalMoves;
 	}
 	
-
 	// gets all moves for current piece
-	private void getMovesInAllDirections(char c, int i, int j) {
+	private void flipColorsInAllDirections(char c, int i, int j) {
 		//  left to right direction
 		int LToRScore =0;
 		int x = i+1; int y = j+0;
@@ -108,8 +138,8 @@ public class ReversiController {
 			x++;
 			LToRScore++;
 		}
-		if(x<8 && LToRScore!=0) {
-			legalMoves.put(new Pair<Integer,Integer>(x,y),LToRScore);
+		if(x<8 && LToRScore!=0 && model.getPiece(x, y) == c) {
+			this.flipColor(c, i, j, LToRScore, 1, 0);
 		}
 		
 		// right to left direction
@@ -119,8 +149,8 @@ public class ReversiController {
 			x--;
 			RToLScore++;
 		}
-		if(x>=0 && RToLScore!=0) {
-			legalMoves.put(new Pair<Integer,Integer>(x,y),RToLScore);
+		if(x>=0 && RToLScore!=0 && model.getPiece(x, y) == c) {
+			this.flipColor(c, i, j, RToLScore, -1, 0);
 		}
 		
 		// up to down direction
@@ -130,8 +160,8 @@ public class ReversiController {
 			y++;
 			UToDScore++;
 		}
-		if(y<8 && UToDScore!=0) {
-			legalMoves.put(new Pair<Integer,Integer>(x,y),UToDScore);
+		if(y<8 && UToDScore!=0 && model.getPiece(x, y) == c) {
+			this.flipColor(c, i, j, UToDScore, 0, 1);
 		}
 		
 		// down to up direction
@@ -141,8 +171,8 @@ public class ReversiController {
 			y--;
 			DToUScore++;
 		}
-		if(y>=0 && DToUScore!=0) {
-			legalMoves.put(new Pair<Integer,Integer>(x,y),DToUScore);
+		if(y>=0 && DToUScore!=0 && model.getPiece(x, y) == c) {
+			this.flipColor(c, i, j, DToUScore, 0, -1);
 		}
 		
 		// diagonal Left Bottom to Right top
@@ -153,8 +183,8 @@ public class ReversiController {
 			x++;
 			LBToRTScore++;
 		}
-		if(y>=0 && x<8 &&  LBToRTScore!=0) {
-			legalMoves.put(new Pair<Integer,Integer>(x,y),LBToRTScore);
+		if(y>=0 && x<8 &&  LBToRTScore!=0 && model.getPiece(x, y) == c) {
+			this.flipColor(c, i, j, LBToRTScore, 1, -1);
 		}
 		
 		// diagonal Right top to Left Bottom 
@@ -165,8 +195,8 @@ public class ReversiController {
 			x--;
 			RTToLBScore++;
 		}
-		if(y<8 && x>=0 && RTToLBScore!=0) {
-			legalMoves.put(new Pair<Integer,Integer>(x,y),RTToLBScore);
+		if(y<8 && x>=0 && RTToLBScore!=0 && model.getPiece(x, y) == c) {
+			this.flipColor(c, i, j, RTToLBScore, -1, 1);
 		}
 		
 		// diagonal Left top to Right Bottom 
@@ -177,8 +207,8 @@ public class ReversiController {
 			x++;
 			LTToRBScore++;
 		}
-		if(y<8 && x<8 && LTToRBScore!=0) {
-			legalMoves.put(new Pair<Integer,Integer>(x,y),LTToRBScore);
+			if(y<8 && x<8 && LTToRBScore!=0 && model.getPiece(x, y) == c) {
+				this.flipColor(c, i, j, LTToRBScore, 1, 1);
 		}
 		
 		// diagonal Right Bottom to Left top 
@@ -189,10 +219,125 @@ public class ReversiController {
 			x--;
 			RBToLTScore++;
 		}
-		if(y>=0 && x>=0 &&  RBToLTScore!=0) {
-			legalMoves.put(new Pair<Integer,Integer>(x,y),RBToLTScore);
+		if(y>=0 && x>=0 &&  RBToLTScore!=0 && model.getPiece(x, y) == c) {
+			this.flipColor(c, i, j, RBToLTScore, -1, -1);
 		}
 		
 	}
+
+	private void flipColor(char c, int i, int j, int score, int idiff, int jdiff) {
+		while(score >= 0) {
+			model.setPiece(c, i, j);
+			score--;
+			i+=idiff;
+			j+=jdiff;
+		}
+		
+	}
+
+	// gets all moves for current piece
+	private void getMovesInAllDirections(char c, int i, int j) {
+		//  left to right direction
+		int LToRScore =0;
+		int x = i+1; int y = j+0;
+		while(x<8 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
+			x++;
+			LToRScore++;
+		}
+		if(x<8 && LToRScore!=0 && model.getPiece(x, y) != c) {
+			Pair<Integer,Integer> p = new Pair<Integer,Integer>(x,y);
+			legalMoves.put(p,legalMoves.containsKey(p)? legalMoves.get(p)+LToRScore:LToRScore);
+		}
+		
+		// right to left direction
+		int RToLScore =0;
+		x = i-1; y = j+0;
+		while(x>=0 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
+			x--;
+			RToLScore++;
+		}
+		if(x>=0 && RToLScore!=0 && model.getPiece(x, y) != c) {
+			Pair<Integer,Integer> p = new Pair<Integer,Integer>(x,y);
+			legalMoves.put(p,legalMoves.containsKey(p)? legalMoves.get(p)+RToLScore:RToLScore);
+		}
+		
+		// up to down direction
+		int UToDScore =0;
+		x = i; y = j+1;
+		while(y<8 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
+			y++;
+			UToDScore++;
+		}
+		if(y<8 && UToDScore!=0 && model.getPiece(x, y) != c) {
+			Pair<Integer,Integer> p = new Pair<Integer,Integer>(x,y);
+			legalMoves.put(p,legalMoves.containsKey(p)? legalMoves.get(p)+UToDScore:UToDScore);
+		}
+		
+		// down to up direction
+		int DToUScore =0;
+		x = i; y = j-1;
+		while(y>=0 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
+			y--;
+			DToUScore++;
+		}
+		if(y>=0 && DToUScore!=0 && model.getPiece(x, y) != c) {
+			Pair<Integer,Integer> p = new Pair<Integer,Integer>(x,y);
+			legalMoves.put(p,legalMoves.containsKey(p)? legalMoves.get(p)+DToUScore:DToUScore);
+		}
+		
+		// diagonal Left Bottom to Right top
+		int LBToRTScore =0;
+		x = i+1; y = j-1;
+		while(y>=0 && x<8 && model.getPiece(x, y) != ' ' &&  model.getPiece(x, y) != c) {
+			y--;
+			x++;
+			LBToRTScore++;
+		}
+		if(y>=0 && x<8 &&  LBToRTScore!=0 && model.getPiece(x, y) != c) {
+			Pair<Integer,Integer> p = new Pair<Integer,Integer>(x,y);
+			legalMoves.put(p,legalMoves.containsKey(p)? legalMoves.get(p)+LBToRTScore:LBToRTScore);
+		}
+		
+		// diagonal Right top to Left Bottom 
+		int RTToLBScore =0;
+		x = i-1; y = j+1;
+		while(y<8 && x>=0 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
+			y++;
+			x--;
+			RTToLBScore++;
+		}
+		if(y<8 && x>=0 && RTToLBScore!=0 && model.getPiece(x, y) != c) {
+			Pair<Integer,Integer> p = new Pair<Integer,Integer>(x,y);
+			legalMoves.put(p,legalMoves.containsKey(p)? legalMoves.get(p)+RTToLBScore:RTToLBScore);
+		}
+		
+		// diagonal Left top to Right Bottom 
+		int LTToRBScore =0;
+		x = i+1; y = j+1;
+		while(y<8 && x<8 && model.getPiece(x, y) != ' ' &&  model.getPiece(x, y) != c) {
+			y++;
+			x++;
+			LTToRBScore++;
+		}
+		if(y<8 && x<8 && LTToRBScore!=0 && model.getPiece(x, y) != c) {
+			Pair<Integer,Integer> p = new Pair<Integer,Integer>(x,y);
+			legalMoves.put(p,legalMoves.containsKey(p)? legalMoves.get(p)+LTToRBScore:LTToRBScore);
+		}
+		
+		// diagonal Right Bottom to Left top 
+		int RBToLTScore =0;
+		x = i-1; y = j-1;
+		while(y>=0 && x>=0 && model.getPiece(x, y) != ' ' &&  model.getPiece(x, y) != c) {
+			y--;
+			x--;
+			RBToLTScore++;
+		}
+		if(y>=0 && x>=0 &&  RBToLTScore!=0 && model.getPiece(x, y) != c) {
+			Pair<Integer,Integer> p = new Pair<Integer,Integer>(x,y);
+			legalMoves.put(p,legalMoves.containsKey(p)? legalMoves.get(p)+RBToLTScore:RBToLTScore);
+		}
+		
+	}
+	
 	
 }
