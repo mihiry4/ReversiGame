@@ -30,7 +30,7 @@ public class Reversi {
 	public static void textReversi(String[] args) {
 		
 		// This class represents the view, it should be how uses play the game
-		System.out.println("Welcome to Mastermind!");
+		System.out.println("Welcome to Reversi!");
 				
 		boolean play = askPlay();
 		// while the user wants to play:
