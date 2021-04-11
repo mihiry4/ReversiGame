@@ -8,7 +8,7 @@ package myExceptions;
 /**
  * Class: ReversiIllegalMoveException
  * @author Shreyas Khandekar
- * Purpose: Thrown when user trie to play a move which is illegal
+ * Purpose: Thrown when user tries to play a move which is illegal
  */
 public class ReversiIllegalMoveException extends Exception {
 
