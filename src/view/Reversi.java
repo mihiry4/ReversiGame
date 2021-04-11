@@ -1,5 +1,8 @@
 /**
- * 
+ * File: Reversi.java
+ * @author Shreyas Khandekar
+ * @author Mihir Yadav
+ * Purpose: Driver for Reversi in either text or GUI View
  */
 package view;
 
@@ -19,6 +22,8 @@ import myExceptions.ReversiIllegalMoveException;
 public class Reversi {
 
 	/**
+	 * Main function to run Reversi.
+	 * This launches the GUI application
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -27,6 +32,10 @@ public class Reversi {
 
 	}
 	
+	/**
+	 * Function to run Reversi in the text View
+	 * @param args
+	 */
 	public static void textReversi(String[] args) {
 		
 		// This class represents the view, it should be how uses play the game

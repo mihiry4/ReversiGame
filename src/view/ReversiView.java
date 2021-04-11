@@ -1,5 +1,8 @@
 /**
- * 
+ * File: Reversi.java
+ * @author Shreyas Khandekar
+ * @author Mihir Yadav
+ * Purpose: GUI View of Reversi using javafx
  */
 package view;
 
@@ -43,16 +46,35 @@ import myExceptions.ReversiGameOverException;
 import myExceptions.ReversiIllegalMoveException;
 
 /**
+ * Class: ReversiView
  * @author Shreyas Khandekar
  * @author Mihir Yadav
+ * Purpose: Play Reversi in GUI View using java fx
  */
 @SuppressWarnings("deprecation")
 public class ReversiView extends Application implements Observer {
 
+	/**
+	 * The representation of the Reversi model
+	 * It contains the board
+	 */
 	private ReversiModel model;
+	
+	/**
+	 * Controller for the game.
+	 */
 	private ReversiController controller;
+	
+	/*
+	 * This is the top level board pane on the
+	 * Javafx window.
+	 */
 	private BorderPane bp;
 	
+	/**
+	 * Constructor which creates the model and controllers
+	 * and also adds this view as the observer of the model
+	 */
 	public ReversiView() {
 		model = new ReversiModel();
 		// Construct the controller, passing in the model
@@ -60,6 +82,11 @@ public class ReversiView extends Application implements Observer {
 		model.addObserver(this);
 	}
 
+	/**
+	 * Start function which sets up the GUI window
+	 * to play Reversi.
+	 * @param stage is the stage which is displayed
+	 */
 	@Override
 	public void start(Stage stage) throws Exception {
 		
@@ -101,6 +128,11 @@ public class ReversiView extends Application implements Observer {
 		
 	}
 	
+	/**
+	 * This function creates a new game by
+	 * deleting the old save file and setting up
+	 * a new model and controller.
+	 */
 	private void createNewGame() {
 		//System.out.println("New Game");
 		File f= new File("save_game.dat");           //file to be delete  
@@ -111,6 +143,12 @@ public class ReversiView extends Application implements Observer {
 		controller.updateView();
 	}
 
+	/**
+	 * When the window is closed, we save the game
+	 * into save_game.dat by saving the board object
+	 * @param stage the stage in which the game 
+	 * 			is being played
+	 */
 	private void saveGameOnClose(Stage stage) {
 		stage.setOnCloseRequest(event -> {
 			if(!controller.isGameOver()) {
@@ -119,7 +157,7 @@ public class ReversiView extends Application implements Observer {
 					ObjectOutputStream oos = new ObjectOutputStream(fout);
 					controller.writeToFile(oos);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					// catch block
 					Alert a = new Alert(Alert.AlertType.INFORMATION);
 					a.setTitle("Message");
 					a.setContentText("AAAAAAAAAAAAAAAHHHHHHHHHH");
@@ -131,7 +169,15 @@ public class ReversiView extends Application implements Observer {
 
 	}
 	
-
+	/**
+	 * This function sets up each of the boxes within the Reversi
+	 * Grid.
+	 * The circle is originally transparent and the on click 
+	 * listener contains the location of the circle in that box
+	 * @param i row of the box
+	 * @param j column of the box 
+	 * @return the stack pane containing the circle and box
+	 */
 	private StackPane addStackPane(int i, int j) {
 		//Rectangle(double x, double y, double width, double height)
 		Rectangle s = new Rectangle(0,0,45,45);
@@ -163,6 +209,10 @@ public class ReversiView extends Application implements Observer {
 	}
 
 
+	/**
+	 * When the game is over we delete the save_file and
+	 * display an alert with the result of the game
+	 */
 	private void gameOverMessage() {
 		File f= new File("save_game.dat");           //file to be delete  
 		f.delete();
@@ -175,6 +225,11 @@ public class ReversiView extends Application implements Observer {
 		
 	}
 
+	/**
+	 * Returns a message which conveys the result of the 
+	 * game if either white or black wins or a draw
+	 * @return A string with the result
+	 */
 	private String getGameResult() {
 		String winner = controller.getWinner();
 		if(winner.equals("w"))
@@ -185,11 +240,13 @@ public class ReversiView extends Application implements Observer {
 			return "Game Draw";
 	}
 
-	private Paint getPaint(String s) {
-		Paint paint1 = Paint.valueOf(s);
-		return paint1;
-	}
-
+	/**
+	 * Updates the view based on the board
+	 * in the model. We update each box color of the
+	 * board as well as the counts at the bottom
+	 * @param o Observable ReversiModel
+	 * @param arg This is always the board
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		ReversiBoard board = (ReversiBoard) arg;
@@ -214,6 +271,14 @@ public class ReversiView extends Application implements Observer {
 		bp.setBottom(l);
 	}
 	
+	/**
+	 * We use this to get a Node from the Grid Pane
+	 * in the specified row and col of the Grid Pane
+	 * @param gp The top level GridPane
+	 * @param row Row of the node which we want
+	 * @param col Col of the node which we want
+	 * @return The node we want from row and col
+	 */
 	private Node getNodeByRowColumn(GridPane gp, int row, int col) {
 		
 		ObservableList<Node> childrenList = gp.getChildren();
