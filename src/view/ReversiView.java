@@ -13,6 +13,8 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -59,12 +61,15 @@ public class ReversiView extends Application implements Observer {
 	    		masterGridPane.add(addStackPane(i, j), i, j);
 	    	}
 	    }
-	    masterGridPane.setPadding(new Insets(40, 10, 40, 16));
+	    masterGridPane.setPadding(new Insets(8, 8, 8, 8));
 	    
 	    setInitialColors();
 	    
+	    Label label = new Label("White: 2 - Black: 2");
+	    bp.setBottom(label);
+	    
 	    // stage setup
-	    Scene scene = new Scene(bp, 400, 430);
+	    Scene scene = new Scene(bp, 384, 424);
 		stage.setScene(scene);
 		stage.setTitle("Reversi");
 		
@@ -165,7 +170,9 @@ public class ReversiView extends Application implements Observer {
 	    		//System.out.println("C");
 	    	}
 	    }
-		int x=0;
+		int[] count = board.getCount();
+		Label l = new Label("White: " + count[1] + " - Black: " + count[0]);
+		bp.setBottom(l);
 	}
 	
 	private Node getNodeByRowColumn(GridPane gp, int row, int col) {
