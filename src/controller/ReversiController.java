@@ -29,6 +29,7 @@ public class ReversiController {
 		cpuColor = 'b';
 		playerColor = 'w';
 		gameOver = false;
+		this.getLegalMoves(this.playerColor);
 	}
 	
 	public ReversiController(ReversiModel model) {
@@ -37,6 +38,7 @@ public class ReversiController {
 		cpuColor = 'b';
 		playerColor = 'w';
 		gameOver = false;
+		this.getLegalMoves(this.playerColor);
 	}
 	
 	public void playMove(int x, int y) throws ReversiIllegalMoveException, ReversiGameOverException {
