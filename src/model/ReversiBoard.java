@@ -30,7 +30,7 @@ public class ReversiBoard implements Serializable{
 	}
 	
 	//gets val at (x,y)
-	public char getValue(int x, int y) {
+	public char getValue(int x, int y) { 
 		return board[x][y];
 	}
 	

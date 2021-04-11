@@ -3,7 +3,7 @@
  */
 package controller;
 
-import java.util.HashMap;
+import java.util.HashMap; 
 
 import javafx.util.Pair;
 import model.ReversiModel;
@@ -99,9 +99,9 @@ public class ReversiController {
 			this.getLegalMoves(this.playerColor);
 			if(this.legalMoves.isEmpty()) {
 				// TODO GAME OVER HANDLING
-				this.gameOver= true;
+				this.gameOver= true; 
 			} else {
-				return; // Player turn
+				return; // Player turn 
 			}
 				
 		} else {
@@ -129,7 +129,7 @@ public class ReversiController {
 		
 	}
 	
-	private boolean isLegalMove(Pair<Integer, Integer> p) {
+	public boolean isLegalMove(Pair<Integer, Integer> p) {
 		return legalMoves.containsKey(p);
 	}
 	
@@ -306,7 +306,7 @@ public class ReversiController {
 		while(y>=0 && x<8 && model.getPiece(x, y) != ' ' &&  model.getPiece(x, y) != c) {
 			y--;
 			x++;
-			LBToRTScore++;
+			LBToRTScore++; 
 		}
 		if(y>=0 && x<8 &&  LBToRTScore!=0 && model.getPiece(x, y) != c) {
 			Pair<Integer,Integer> p = new Pair<Integer,Integer>(x,y);
