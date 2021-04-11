@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Observable;
 
 import javafx.util.Pair;
+import view.ReversiView;
 
 /**
  * @author Shreyas Khandekar
@@ -22,12 +23,11 @@ public class ReversiModel extends Observable {
 	// creates new reversi board
 	public ReversiModel() {
 		board = new ReversiBoard();
-		board.setValue('w', 3, 3);
-		board.setValue('w', 4, 4);
-		board.setValue('b', 3, 4);
-		board.setValue('b', 4, 3);
+		setPiece('w', 3, 3);
+		setPiece('w', 4, 4);
+		setPiece('b', 3, 4);
+		setPiece('b', 4, 3);
 	}
-	
 	// get piece at x,y
 	public char getPiece(int x, int y) {
 		return board.getValue(x, y);
@@ -36,6 +36,8 @@ public class ReversiModel extends Observable {
 	// sets piece at x,y
 	public void setPiece(char c, int x, int y) {
 		board.setValue(c, x, y);
+		setChanged();
+		notifyObservers(this.board);
 	}
 	
 	public String toString() {
@@ -47,5 +49,9 @@ public class ReversiModel extends Observable {
 			retval+="\n--------------------------------\n";
 		}
 		return retval;
+	}
+	
+	public int[] getCount(){
+		return board.getCount();
 	}
 }

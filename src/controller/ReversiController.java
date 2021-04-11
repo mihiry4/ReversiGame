@@ -54,11 +54,26 @@ public class ReversiController {
 		System.out.println(this.getBoard());
 
 		// Now its the CPU's turn to play after player
+		for(int i=0 ; i< 99999 ;++i) {
+			i = i + 1 -1 ;
+			
+		}
 		cpuTurn();
+		System.out.println(this.getBoard());
 	}
 	
 	public boolean isGameOver() {
 		return this.gameOver;
+	}
+	
+	public String getWinner() {
+		int[] count = model.getCount();
+		if(count[0]==count[1]) {
+			return "d";
+		} if(count[0]>count[1]) {
+			return "b";
+		} else
+			return "w";
 	}
 	
 	public String getBoard() {

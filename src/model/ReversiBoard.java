@@ -34,6 +34,20 @@ public class ReversiBoard implements Serializable{
 		return board[x][y];
 	}
 	
+	public int[] getCount() {
+		int[] retval = {0,0};
+		
+		for(int i =0;i<8;i++) {
+			for(int j = 0;j<8;j++) {
+				if(board[i][j] == 'b')
+					retval[0]++;
+				else if(board[i][j] == 'w')
+					retval[1]++;
+				
+			}
+		}
+		return retval;
+	}
 	
 	private static final long serialVersionUID = 1L;
 
