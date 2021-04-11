@@ -3,6 +3,7 @@
  */
 package view;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -63,12 +64,19 @@ public class ReversiView extends Application implements Observer {
 	public void start(Stage stage) throws Exception {
 		
 		bp = new BorderPane();
+		// Top  Menu
 		MenuBar menuBar = new MenuBar();
 		Menu menuFile = new Menu("File");
         MenuItem newgame = new MenuItem("New Game");
+        newgame.setOnAction(event -> {
+        	createNewGame();
+        });
         menuFile.getItems().addAll(newgame);
         menuBar.getMenus().addAll(menuFile);
 		bp.setTop(menuBar);
+		
+		
+		// Main Grid
 		GridPane masterGridPane = new GridPane();
 	    bp.setCenter(masterGridPane);
 	    masterGridPane.setStyle("-fx-background-color: green");
@@ -80,56 +88,49 @@ public class ReversiView extends Application implements Observer {
 	    }
 	    masterGridPane.setPadding(new Insets(8, 8, 8, 8));
 	    
-	    setInitialColors(); 
+	    //setInitialBoard(); 
+	    controller.updateView();
 	    
-	    Label label = new Label("White: 2 - Black: 2");
-	    bp.setBottom(label);
 	    
 	    // stage setup
 	    Scene scene = new Scene(bp, 384, 424);
 		stage.setScene(scene);
 		stage.setTitle("Reversi");
-		
+		saveGameOnClose(stage);
 		stage.show();
 		
 	}
 	
+	private void createNewGame() {
+		//System.out.println("New Game");
+		File f= new File("save_game.dat");           //file to be delete  
+		f.delete();
+		model = new ReversiModel();
+		controller = new ReversiController(model);
+		model.addObserver(this);
+		controller.updateView();
+	}
+
 	private void saveGameOnClose(Stage stage) {
 		stage.setOnCloseRequest(event -> {
-			try {
-				FileOutputStream fout = new FileOutputStream("save_game.dat");
-				ObjectOutputStream oos = new ObjectOutputStream(fout);
-				controller.writeToFile(oos);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				Alert a = new Alert(Alert.AlertType.INFORMATION);
-				a.setTitle("Message");
-				a.setContentText("AAAAAAAAAAAAAAAHHHHHHHHHH");
-				a.setHeaderText("Unable to Save game");
-				a.showAndWait();
+			if(!controller.isGameOver()) {
+				try {
+					FileOutputStream fout = new FileOutputStream("save_game.dat");
+					ObjectOutputStream oos = new ObjectOutputStream(fout);
+					controller.writeToFile(oos);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Alert a = new Alert(Alert.AlertType.INFORMATION);
+					a.setTitle("Message");
+					a.setContentText("AAAAAAAAAAAAAAAHHHHHHHHHH");
+					a.setHeaderText("Unable to Save game");
+					a.showAndWait();
+				}
 			}
 		});
 
 	}
 	
-	private void setInitialColors() {
-		GridPane gp = (GridPane) bp.getCenter();
-		StackPane sp = (StackPane) getNodeByRowColumn(gp, 3, 3);
-	    Circle circle = (Circle) sp.getChildren().get(1);
-	    circle.setFill(Color.WHITE);		
-	    
-	    sp = (StackPane) getNodeByRowColumn(gp, 4, 4);
-	    circle = (Circle) sp.getChildren().get(1);
-	    circle.setFill(Color.WHITE);
-	    
-	    sp = (StackPane) getNodeByRowColumn(gp, 3, 4);
-	    circle = (Circle) sp.getChildren().get(1);
-	    circle.setFill(Color.BLACK);	
-	    
-	    sp = (StackPane) getNodeByRowColumn(gp, 4, 3);
-	    circle = (Circle) sp.getChildren().get(1);
-	    circle.setFill(Color.BLACK);		
-	}
 
 	private StackPane addStackPane(int i, int j) {
 		//Rectangle(double x, double y, double width, double height)
@@ -142,7 +143,7 @@ public class ReversiView extends Application implements Observer {
 		stackPane.getChildren().add(c);
 		c.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent me) -> {
 			try {
-				controller.playMove(i, j);
+				controller.humanTurn(i, j);
 				if(controller.isGameOver())
 					gameOverMessage();
 			} catch (ReversiIllegalMoveException e) {
@@ -163,6 +164,8 @@ public class ReversiView extends Application implements Observer {
 
 
 	private void gameOverMessage() {
+		File f= new File("save_game.dat");           //file to be delete  
+		f.delete();
 		Alert a = new Alert(Alert.AlertType.INFORMATION);
 		a.setTitle("Message");
 		a.setContentText(getGameResult());

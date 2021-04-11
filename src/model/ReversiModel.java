@@ -51,6 +51,10 @@ public class ReversiModel extends Observable {
 	// sets piece at x,y
 	public void setPiece(char c, int x, int y) {
 		board.setValue(c, x, y);
+		this.manualNotify();
+	}
+	
+	public void manualNotify() {
 		setChanged();
 		notifyObservers(this.board);
 	}

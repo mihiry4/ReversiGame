@@ -5,7 +5,9 @@ package controller;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.HashMap; 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 import javafx.util.Pair;
 import model.ReversiModel;
@@ -47,7 +49,11 @@ public class ReversiController {
 		model.saveBoard(oos);
 	}
 	
-	public void playMove(int x, int y) throws ReversiIllegalMoveException, ReversiGameOverException {
+	public void updateView() {
+		model.manualNotify();
+	}
+	
+	public void humanTurn(int x, int y) throws ReversiIllegalMoveException, ReversiGameOverException {
 		if(gameOver)
 			throw new ReversiGameOverException("Cannot play after game over");
 		this.getLegalMoves(this.playerColor);
@@ -59,15 +65,15 @@ public class ReversiController {
 		
 		this.flipColorsInAllDirections(this.playerColor, x, y);
 		legalMoves.clear();
-		System.out.println(this.getBoard());
+		//System.out.println(this.getBoard());
 
 		// Now its the CPU's turn to play after player
 		for(int i=0 ; i< 99999 ;++i) {
 			i = i + 1 -1 ;
 			
 		}
-		cpuTurn();
-		System.out.println(this.getBoard());
+		computerTurn();
+		//System.out.println(this.getBoard());
 	}
 	
 	public boolean isGameOver() { 
@@ -101,7 +107,7 @@ public class ReversiController {
 		}
 		return playerCount>cpuCount? 1: (playerCount==cpuCount? 0 : -1);
 	}
-	private void cpuTurn() {
+	private void computerTurn() {
 		this.getLegalMoves(this.cpuColor);
 		if(this.legalMoves.isEmpty()) {
 			this.getLegalMoves(this.playerColor);
@@ -115,7 +121,7 @@ public class ReversiController {
 		} else {
 			playBestMove();
 			if(this.getLegalMoves(this.playerColor).isEmpty())
-				this.cpuTurn();
+				this.computerTurn();
 			else
 				return; // Player turn
 		}
@@ -123,14 +129,23 @@ public class ReversiController {
 	
 	private void playBestMove() {
 		int highestScore = 0;
-		Pair<Integer, Integer> bestMove = null;
+		ArrayList<Pair<Integer, Integer>> bestMoves = new ArrayList<>();
 		for(Pair<Integer, Integer> p : this.legalMoves.keySet()) {
 			int currScore = this.legalMoves.get(p);
 			if(currScore>highestScore) {
 				highestScore = currScore;
-				bestMove = p;
 			}
 		}
+		for(Pair<Integer, Integer> p : this.legalMoves.keySet()) {
+			int currScore = this.legalMoves.get(p);
+			if(currScore == highestScore) {
+				bestMoves.add(p);
+			}
+		}
+		Pair<Integer, Integer> bestMove = null;
+		Random rand = new Random();
+		bestMove = bestMoves.get(rand.nextInt(bestMoves.size()));
+		
 		model.setPiece(cpuColor, bestMove.getKey(), bestMove.getValue());
 		this.flipColorsInAllDirections(this.cpuColor, bestMove.getKey(), bestMove.getValue());
 		legalMoves.clear();

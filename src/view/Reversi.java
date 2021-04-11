@@ -44,7 +44,7 @@ public class Reversi {
 		        	int[] playerMove = getPlayerMove();
 		        	// Check whether or not the input is correct (by asking the controller)
 		        	try {
-						controller.playMove(playerMove[0], playerMove[1]);
+						controller.humanTurn(playerMove[0], playerMove[1]);
 					} catch (ReversiIllegalMoveException | ReversiGameOverException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
