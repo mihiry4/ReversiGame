@@ -26,7 +26,7 @@ public class ReversiModel extends Observable {
 
 	private ReversiBoard board;
 	
-	// creates new reversi board
+	// creates new reversi board 
 	public ReversiModel() {
 		try {
 			FileInputStream fin = new FileInputStream("save_game.dat");
@@ -38,7 +38,7 @@ public class ReversiModel extends Observable {
 			setPiece('w', 3, 3);
 			setPiece('w', 4, 4);
 			setPiece('b', 3, 4);
-			setPiece('b', 4, 3);
+			setPiece('b', 4, 3); 
 		} 
 
 		

@@ -107,15 +107,15 @@ public class ReversiController {
 		}
 		return playerCount>cpuCount? 1: (playerCount==cpuCount? 0 : -1);
 	}
-	private void computerTurn() {
+	public void computerTurn() {
 		this.getLegalMoves(this.cpuColor);
 		if(this.legalMoves.isEmpty()) {
 			this.getLegalMoves(this.playerColor);
 			if(this.legalMoves.isEmpty()) {
 				// TODO GAME OVER HANDLING
-				this.gameOver= true; 
-			} else {
-				return; // Player turn 
+				this.gameOver= true;
+			} else { 
+				return; // Player turn
 			}
 				
 		} else {
@@ -127,7 +127,7 @@ public class ReversiController {
 		}
 	}
 	
-	private void playBestMove() {
+	public void playBestMove() {
 		int highestScore = 0;
 		ArrayList<Pair<Integer, Integer>> bestMoves = new ArrayList<>();
 		for(Pair<Integer, Integer> p : this.legalMoves.keySet()) {
@@ -167,8 +167,8 @@ public class ReversiController {
 		return legalMoves;
 	}
 	
-	// gets all moves for current piece
-	private void flipColorsInAllDirections(char c, int i, int j) {
+	// flips all colors for current piece
+	public void flipColorsInAllDirections(char c, int i, int j) {
 		//  left to right direction
 		int LToRScore =0;
 		int x = i+1; int y = j+0;
@@ -263,7 +263,7 @@ public class ReversiController {
 		
 	}
 
-	private void flipColor(char c, int i, int j, int score, int idiff, int jdiff) {
+	public void flipColor(char c, int i, int j, int score, int idiff, int jdiff) {
 		while(score >= 0) {
 			model.setPiece(c, i, j);
 			score--;
@@ -274,7 +274,7 @@ public class ReversiController {
 	}
 
 	// gets all moves for current piece
-	private void getMovesInAllDirections(char c, int i, int j) {
+	public void getMovesInAllDirections(char c, int i, int j) {
 		//  left to right direction
 		int LToRScore =0;
 		int x = i+1; int y = j+0;
