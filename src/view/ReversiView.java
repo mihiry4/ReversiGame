@@ -17,6 +17,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -55,11 +58,12 @@ public class ReversiView extends Application implements Observer {
 	public void start(Stage stage) throws Exception {
 		
 		bp = new BorderPane();
-		ObservableList<String> options = FXCollections.observableArrayList("New Game");
-		ComboBox comboBox = new ComboBox(options);
-		comboBox.setPromptText("File");
-		comboBox.setMaxWidth(80);
-		bp.setTop(comboBox);
+		MenuBar menuBar = new MenuBar();
+		Menu menuFile = new Menu("File");
+        MenuItem newgame = new MenuItem("New Game");
+        menuFile.getItems().addAll(newgame);
+        menuBar.getMenus().addAll(menuFile);
+		bp.setTop(menuBar);
 		GridPane masterGridPane = new GridPane();
 	    bp.setCenter(masterGridPane);
 	    masterGridPane.setStyle("-fx-background-color: green");
