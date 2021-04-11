@@ -3,6 +3,8 @@
  */
 package controller;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap; 
 
 import javafx.util.Pair;
@@ -39,6 +41,10 @@ public class ReversiController {
 		gameOver = false;
 	}
 	
+	public void writeToFile(ObjectOutputStream oos) throws IOException {
+		model.saveBoard(oos);
+	}
+	
 	public void playMove(int x, int y) throws ReversiIllegalMoveException, ReversiGameOverException {
 		if(gameOver)
 			throw new ReversiGameOverException("Cannot play after game over");
@@ -62,7 +68,7 @@ public class ReversiController {
 		System.out.println(this.getBoard());
 	}
 	
-	public boolean isGameOver() {
+	public boolean isGameOver() { 
 		return this.gameOver;
 	}
 	

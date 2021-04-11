@@ -127,7 +127,7 @@ public class ReversiTest {
 		Pair p4 = new Pair(5,3);
 		assertFalse(controller.isLegalMove(p1));
 		assertFalse(controller.isLegalMove(p2));
-		assertTrue(controller.isLegalMove(p3));
+		assertTrue(controller.isLegalMove(p3)); 
 		assertTrue(controller.isLegalMove(p4)); 
 	}
 }
