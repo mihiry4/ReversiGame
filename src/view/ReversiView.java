@@ -8,11 +8,14 @@ import java.util.Observer;
 
 import controller.ReversiController;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -52,6 +55,11 @@ public class ReversiView extends Application implements Observer {
 	public void start(Stage stage) throws Exception {
 		
 		bp = new BorderPane();
+		ObservableList<String> options = FXCollections.observableArrayList("New Game");
+		ComboBox comboBox = new ComboBox(options);
+		comboBox.setPromptText("File");
+		comboBox.setMaxWidth(80);
+		bp.setTop(comboBox);
 		GridPane masterGridPane = new GridPane();
 	    bp.setCenter(masterGridPane);
 	    masterGridPane.setStyle("-fx-background-color: green");
@@ -63,7 +71,7 @@ public class ReversiView extends Application implements Observer {
 	    }
 	    masterGridPane.setPadding(new Insets(8, 8, 8, 8));
 	    
-	    setInitialColors();
+	    setInitialColors(); 
 	    
 	    Label label = new Label("White: 2 - Black: 2");
 	    bp.setBottom(label);
