@@ -3,6 +3,11 @@
  */
 package view;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.PrintStream;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -86,6 +91,25 @@ public class ReversiView extends Application implements Observer {
 		stage.setTitle("Reversi");
 		
 		stage.show();
+		
+	}
+	
+	private void saveGameOnClose(Stage stage) {
+		stage.setOnCloseRequest(event -> {
+			try {
+				FileOutputStream fout = new FileOutputStream("save_game.dat");
+				ObjectOutputStream oos = new ObjectOutputStream(fout);
+				controller.writeToFile(oos);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Alert a = new Alert(Alert.AlertType.INFORMATION);
+				a.setTitle("Message");
+				a.setContentText("AAAAAAAAAAAAAAAHHHHHHHHHH");
+				a.setHeaderText("Unable to Save game");
+				a.showAndWait();
+			}
+		});
+
 	}
 	
 	private void setInitialColors() {
