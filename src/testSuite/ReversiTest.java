@@ -35,7 +35,8 @@ import myExceptions.ReversiIllegalMoveException;
 public class ReversiTest {
 	@Test
 	void testGetAllMoves(){
-		
+		File f= new File("save_game.dat");           //file to be delete  
+		f.delete();
 		ReversiModel model = new ReversiModel();
 		
 		ReversiController controller = new ReversiController(model);
