@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,7 +35,6 @@ public class ReversiTest {
 	@Test
 	void testgetWinner1(){
 		ReversiModel model = new ReversiModel();
-
 		ReversiController controller = new ReversiController(model);
 		assertTrue(controller.getWinner().equals("d"));
 	}
@@ -130,6 +130,14 @@ public class ReversiTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
+			controller.humanTurn(5, 3);
+		} catch (ReversiIllegalMoveException e) {
+			System.out.println("IllegalMove exception");
+		} catch (ReversiGameOverException e) {
+			System.out.println("Game over exception");
+		}
+		controller.computerTurn();
 	}
 	
 	@Test
@@ -143,7 +151,6 @@ public class ReversiTest {
 			controller.writeToFile(oos);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
@@ -167,6 +174,92 @@ public class ReversiTest {
 		controller.getLegalMoves('w');
 		controller.getMovesInAllDirections('w', 3, 3);
 		controller.flipColorsInAllDirections('w',5,3);
+	}
+	
+	
+	@Test 
+	void testConsecutiveTurns1() {
+		ReversiModel model = new ReversiModel();
+		model.setPiece('b', 5, 4);
+		model.setPiece('b', 3, 5);
+		model.setPiece('b', 2, 4);
+		model.setPiece('b', 5, 3);
+		model.setPiece('b', 4, 2);
+		model.setPiece('b', 5, 5);
+		model.setPiece('b', 6, 4);
+		model.setPiece('b', 4, 5);
+		model.setPiece('b', 4, 6);
+		ReversiController controller = new ReversiController(model);
+		controller.computerTurn();
+	}
+	
+	@Test 
+	void testConsecutiveTurns2() {
+		
+		ReversiModel model = new ReversiModel();
+		model.setPiece('w', 5, 4);
+		model.setPiece('w', 3, 5);
+		model.setPiece('w', 2, 4);
+		model.setPiece('w', 5, 3);
+		model.setPiece('w', 4, 2);
+		model.setPiece('w', 5, 5);
+		model.setPiece('w', 6, 4);
+		model.setPiece('w', 4, 5);
+		model.setPiece('w', 4, 6);
+		ReversiController controller = new ReversiController(model);
+		controller.computerTurn();
+	}
+	
+	@Test 
+	void testOnlyOneTurn() {
+		ReversiModel model = new ReversiModel();
+		model.setPiece('w', 3, 4);
+		model.setPiece('w', 4, 3);
+		model.setPiece('w', 5, 3);
+		model.setPiece('w', 6, 3);
+		ReversiController controller = new ReversiController(model);
+		controller.computerTurn();
+	}
+	
+	@Test 
+	void testLToR() {
+		ReversiModel model = new ReversiModel();
+		ReversiController controller = new ReversiController(model);
+		try {
+			controller.humanTurn(5, 3);
+		} catch (ReversiIllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ReversiGameOverException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		controller.computerTurn();
+	}
+	
+	@Test 
+	void testLBToRT() {
+		ReversiModel model1 = new ReversiModel();
+		model1.setPiece('w', 2, 5);
+		ReversiController controller = new ReversiController(model1);
+		try {
+			controller.humanTurn(5, 2);
+		} catch (ReversiIllegalMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ReversiGameOverException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		controller.computerTurn();
+	}
+	
+	@Test 
+	void testRBToLT() {
+		ReversiModel model1 = new ReversiModel();
+		model1.setPiece('b', 5, 5);
+		ReversiController controller = new ReversiController(model1);
+		controller.computerTurn();
 	}
 	
 }

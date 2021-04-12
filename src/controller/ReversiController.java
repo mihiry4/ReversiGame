@@ -114,8 +114,8 @@ public class ReversiController {
 			if(this.legalMoves.isEmpty()) {
 				// TODO GAME OVER HANDLING
 				this.gameOver= true;
-			} else { 
-				return; // Player turn
+			} else {
+				return; // Player turn 
 			}
 				
 		} else {
