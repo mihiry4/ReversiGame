@@ -54,8 +54,9 @@ public class ReversiController {
 	}
 	
 	public void humanTurn(int x, int y) throws ReversiIllegalMoveException, ReversiGameOverException {
-		if(gameOver)
+		if(gameOver) {
 			throw new ReversiGameOverException("Cannot play after game over");
+		}
 		this.getLegalMoves(this.playerColor);
 		if(isLegalMove(new Pair<Integer, Integer>(x,y)))
 			this.model.setPiece(this.playerColor, x, y);
@@ -112,7 +113,6 @@ public class ReversiController {
 		if(this.legalMoves.isEmpty()) {
 			this.getLegalMoves(this.playerColor);
 			if(this.legalMoves.isEmpty()) {
-				// TODO GAME OVER HANDLING
 				this.gameOver= true;
 			} else {
 				return; // Player turn 
@@ -157,6 +157,7 @@ public class ReversiController {
 	}
 	
 	public HashMap<Pair<Integer, Integer>, Integer> getLegalMoves(char c){
+		legalMoves.clear();
 		for(int i = 0;i<8;i++) {
 			for(int j = 0;j<8;j++) {
 				if(model.getPiece(i,j) == c) {
@@ -169,7 +170,7 @@ public class ReversiController {
 	
 	// flips all colors for current piece
 	public void flipColorsInAllDirections(char c, int i, int j) {
-		//  left to right direction
+		//  left to right direction	
 		int LToRScore =0;
 		int x = i+1; int y = j+0;
 		while(x<8 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
@@ -284,7 +285,9 @@ public class ReversiController {
 		}
 		if(x<8 && LToRScore!=0 && model.getPiece(x, y) != c) {
 			Pair<Integer,Integer> p = new Pair<Integer,Integer>(x,y);
-			legalMoves.put(p,legalMoves.containsKey(p)? legalMoves.get(p)+LToRScore:LToRScore);
+			legalMoves.put(p,legalMoves.containsKey(p)? legalMoves.get(p)+LToRScore:LToRScore); // Can't get
+			// full coverage for this as as this is the first case so a preexisting key would not be
+			// present in the legalMoves Map
 		}
 		
 		// right to left direction
