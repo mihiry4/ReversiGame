@@ -1,5 +1,8 @@
 /**
- * 
+ * File: Reversi.java
+ * @author Shreyas Khandekar
+ * @author Mihir Yadav
+ * Purpose: Controller for Reversi
  */
 package controller;
 
@@ -15,18 +18,39 @@ import myExceptions.ReversiGameOverException;
 import myExceptions.ReversiIllegalMoveException;
 
 /**
+ * Class: ReversiController
  * @author Shreyas Khandekar
  * @author Mihir Yadav
+ * Purpose: Controller for the Reversi Game
  */
 public class ReversiController {
 
-	
+	/**
+	 * model with which the controller is associated
+	 */
 	private ReversiModel model;
+	/**
+	 * Color of the computer player
+	 * Always black in this version
+	 */
 	private char cpuColor;
+	/**
+	 * Color of the human player
+	 * Always black in this version
+	 */
 	private char playerColor;
+	/**
+	 * True if the game is over
+	 */
 	private boolean gameOver;
+	/**
+	 * Map of legal moves for whoever's turn it is
+	 */
 	private HashMap<Pair<Integer, Integer>, Integer> legalMoves;
 	
+	/**
+	 * Constructor which sets up a new model
+	 */
 	public ReversiController() {
 		model = new ReversiModel();
 		legalMoves = new HashMap<Pair<Integer, Integer>, Integer>();
@@ -36,6 +60,10 @@ public class ReversiController {
 		this.getLegalMoves(this.playerColor);
 	}
 	
+	/**
+	 * Constructor which uses the passed model
+	 * @param model to associate with the constructor
+	 */
 	public ReversiController(ReversiModel model) {
 		this.model = model;
 		legalMoves = new HashMap<Pair<Integer, Integer>, Integer>();
@@ -45,14 +73,30 @@ public class ReversiController {
 		this.getLegalMoves(this.playerColor);
 	}
 	
+	/**
+	 * Used to write the model/board to an object output stream
+	 * @param oos Object output stream to which we write
+	 * @throws IOException
+	 */
 	public void writeToFile(ObjectOutputStream oos) throws IOException {
 		model.saveBoard(oos);
 	}
 	
+	/**
+	 * Manually tells the model to notify to view to update
+	 */
 	public void updateView() {
 		model.manualNotify();
 	}
 	
+	/**
+	 * Called when the player plays this game they chose the x and y
+	 * positions of where they want to place their piece
+	 * @param x row of piece position
+	 * @param y col of piece position
+	 * @throws ReversiIllegalMoveException
+	 * @throws ReversiGameOverException
+	 */
 	public void humanTurn(int x, int y) throws ReversiIllegalMoveException, ReversiGameOverException {
 		if(gameOver) {
 			throw new ReversiGameOverException("Cannot play after game over");
@@ -77,10 +121,19 @@ public class ReversiController {
 		//System.out.println(this.getBoard());
 	}
 	
+	/**
+	 * Tells us if the game is over
+	 * @return if game is over
+	 */
 	public boolean isGameOver() { 
 		return this.gameOver;
 	}
 	
+	/**
+	 * Query who has the most pieces after game over
+	 * to check who won
+	 * @return w for white wins b for black wins d for draw
+	 */
 	public String getWinner() {
 		int[] count = model.getCount();
 		if(count[0]==count[1]) {
@@ -91,10 +144,20 @@ public class ReversiController {
 			return "w";
 	}
 	
+	/**
+	 * Get a string of the board for the text view
+	 * @return printable board
+	 */
 	public String getBoard() {
 		return model.toString();
 	}
 	
+	/**
+	 * This function is not used in the GUI view
+	 * It was replaces by the combination of getWinner and
+	 * isGameOver
+	 * @return 1 if player wins, -1 if cpu wins 0 if draw
+	 */
 	public int playerWin() {
 		int playerCount=0;
 		int cpuCount=0;
@@ -108,6 +171,13 @@ public class ReversiController {
 		}
 		return playerCount>cpuCount? 1: (playerCount==cpuCount? 0 : -1);
 	}
+
+	
+	/**
+	 * Computer uses this function to play its turn
+	 * Checks the legal moves and plays the one which maximised score
+	 * for this turn
+	 */
 	public void computerTurn() {
 		this.getLegalMoves(this.cpuColor);
 		if(this.legalMoves.isEmpty()) {
@@ -127,6 +197,11 @@ public class ReversiController {
 		}
 	}
 	
+
+	/**
+	 * Calculates and plays the best move which maximises the immediate
+	 * score for the computer
+	 */
 	public void playBestMove() {
 		int highestScore = 0;
 		ArrayList<Pair<Integer, Integer>> bestMoves = new ArrayList<>();
@@ -152,10 +227,22 @@ public class ReversiController {
 		
 	}
 	
+	/**
+	 * Checks if a certain move is legal
+	 * @param p pair with x and y coordinates for the move
+	 * @return true if the move is legal false otherwise
+	 */
 	public boolean isLegalMove(Pair<Integer, Integer> p) {
 		return legalMoves.containsKey(p);
 	}
 	
+	/**
+	 * Gets the lgal moves for a certain player (color)
+	 * c can be b or w in this version
+	 * @param c b or w denoting the player we want to get legalMoves for
+	 * @return the Hashmap with the legalmoves and the score we would gain
+	 * 			if we play this move
+	 */
 	public HashMap<Pair<Integer, Integer>, Integer> getLegalMoves(char c){
 		legalMoves.clear();
 		for(int i = 0;i<8;i++) {
@@ -168,9 +255,17 @@ public class ReversiController {
 		return legalMoves;
 	}
 	
-	// flips all colors for current piece
+
+	/**
+	 * Playing a certain move means we need to flip the appropriate pieces
+	 * This function does that for a given move 
+	 * @param c Color of the player
+	 * @param i row 
+	 * @param j col
+	 */
 	public void flipColorsInAllDirections(char c, int i, int j) {
-		//  left to right direction	
+		//  left to right direction
+
 		int LToRScore =0;
 		int x = i+1; int y = j+0;
 		while(x<8 && model.getPiece(x, y) != ' ' && model.getPiece(x, y) != c) {
@@ -264,7 +359,19 @@ public class ReversiController {
 		
 	}
 
-	public void flipColor(char c, int i, int j, int score, int idiff, int jdiff) {
+
+	/**
+	 * Flips the color in a certain direction. The number of pieces flipped
+	 * in that direction is dictated by the score associated with that 
+	 * move in that direction
+	 * @param c The color to change the pieces to
+	 * @param i The starting place row
+	 * @param j The starting place column
+	 * @param score the score associated with the direction and that move
+	 * @param idiff This combined with jdiff specifies the direction
+	 * @param jdiff This combined with idiff specifies the direction
+	 */
+	private void flipColor(char c, int i, int j, int score, int idiff, int jdiff) {
 		while(score >= 0) {
 			model.setPiece(c, i, j);
 			score--;
@@ -274,7 +381,14 @@ public class ReversiController {
 		
 	}
 
-	// gets all moves for current piece
+
+	/**
+	 * Gets all moves for current piece denoted by the row i and col j
+	 * We check all directions for that piece.
+	 * @param c The piece color
+	 * @param i the row of the piece
+	 * @param j the col of the piece
+	 */
 	public void getMovesInAllDirections(char c, int i, int j) {
 		//  left to right direction
 		int LToRScore =0;

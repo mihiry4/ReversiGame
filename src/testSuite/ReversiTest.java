@@ -1,3 +1,9 @@
+/**
+ * File: Reversi.java
+ * @author Shreyas Khandekar
+ * @author Mihir Yadav
+ * Purpose: Driver for Reversi in either text or GUI View
+ */
 package testSuite;
 
 import static org.junit.Assert.assertEquals;

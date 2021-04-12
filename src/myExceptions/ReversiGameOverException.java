@@ -1,13 +1,14 @@
 /**
- * File: ReversiIllegalMoveException.java
+ * File: ReversiGameOverException.java
  * @author Shreyas Khandekar
  * Purpose: Create an exception for illegal move in reversi
  */
 package myExceptions;
 
 /**
+ * Class: ReversiGameOverException
  * @author Shreyas Khandekar
- *
+ * Purpose: Thrown when user tries to play a move when the game has already ended
  */
 public class ReversiGameOverException extends Exception {
 
